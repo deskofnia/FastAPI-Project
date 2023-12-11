@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     SENDGRID_API_KEY: str
     SENDGRID_ADMIN_MAIL: str
+    OPENAI_API_KEY: str
+    MILVUS_PORT: int
+    MILVUS_HOST: str
     
 
     class Config:
