@@ -1,5 +1,5 @@
+from pydantic_settings  import BaseSettings
 import os
-from pydantic import BaseSettings
 
 class Settings(BaseSettings):
     POSTGRES_PORT: int
