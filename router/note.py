@@ -1,3 +1,4 @@
+from fastapi.params import Query
 from database import get_db
 from fastapi import APIRouter, Depends
 from oauth2 import get_current_user
@@ -12,7 +13,7 @@ router = APIRouter(tags=["Notes"], prefix="/notes")
 
 # Get All Notes API
 @router.get("/", response_model=ResponseModal)
-def get_notes_route( db: Session = Depends(get_db), limit: int = 10, page:int = 1, search: str ="", user_info: Session=Depends(get_current_user) ):
+def get_notes_route( db: Session = Depends(get_db), limit: int = Query(10), page:int = Query(1), search: str = Query(""), user_info: Session=Depends(get_current_user) ):
     return get_notes(db, limit, page, search, user_info)
 
 # Create Note API

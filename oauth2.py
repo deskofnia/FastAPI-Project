@@ -1,7 +1,8 @@
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, WebSocket, status, Query
 from jose import JWTError, jwt
 from pydantic import ValidationError
+from typing import Optional
 from config import env_variables
 
 security = HTTPBearer()
@@ -34,3 +35,13 @@ async def check_token_middleware(user: dict = Depends(get_current_user)):
     # For example, you can log the user details or perform authorization checks
     print(f"Authenticated User: {user['user_id']}, Email: {user['email']}")
     return
+
+
+async def get_token(
+    websocket: WebSocket,
+    token: Optional[str] = Query(None),
+):
+    if token is None or token == "":
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+
+    return token

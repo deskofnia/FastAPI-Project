@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, status
 from fastapi.middleware.cors import CORSMiddleware
-from router import (note, auth)
+from router import (chat, note, auth)
 from database import engine, Base
 
 Base.metadata.create_all(bind=engine)
@@ -22,6 +22,7 @@ routes = APIRouter()
 
 routes.include_router(note.router)
 routes.include_router(auth.router)
+routes.include_router(chat.router)
 
 
 app.include_router(routes, prefix="/api/v1")
