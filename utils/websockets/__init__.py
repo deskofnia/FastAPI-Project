@@ -4,12 +4,12 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
     
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket, user: str):
         await websocket.accept()
-        self.active_connections.append(websocket)
+        self.active_connections.append((websocket, user))
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+    def disconnect(self, websocket: WebSocket, user: str):
+        self.active_connections.remove((websocket, user))
 
     async def send_personal_message(self, message:str, websocket: WebSocket):
         await websocket.send_text(message)

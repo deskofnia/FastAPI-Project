@@ -54,11 +54,23 @@ async def token_generator(name: str, request):
     return data
 
 async def websocket_endpoint(websocket: WebSocket):
-    await manager.connect(websocket)
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await manager.send_personal_message(f"Response: Simulating response from the GPT service ${data}", websocket)
+    sender = websocket.cookies.get("X-Authorization")
 
-    except WebSocketDisconnect:
-        manager.disconnect(websocket)
+    if sender:
+        await manager.connect(websocket, sender)
+        response = {
+            "sender": sender,
+            "message": "connected to websocket"
+        }
+        await manager.broadcast(response)
+        try:
+            while True:
+                data = await websocket.receive_text()
+                await manager.broadcast(data)
+
+        except WebSocketDisconnect:
+            manager.disconnect(websocket, sender)
+            response = {
+                "message": "left the chat"
+            }
+            await manager.broadcast(response)
