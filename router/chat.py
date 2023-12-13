@@ -1,15 +1,20 @@
 from fastapi import APIRouter, Depends, Request, Response, WebSocket
 from oauth2 import get_token
-from repository.chat import get_html, token_generator, websocket_endpoint
+from repository.chat import get_home_html, get_chat_html, token_generator, websocket_endpoint
 from schemas.chat_schemas import RegisterValidator
 
 
 router = APIRouter(tags=["CHAT"], prefix="/message")
 
-# Get HTML API
+# Get Chat HTML API
+@router.get("/chat")
+async def get_html_route():
+    return await get_chat_html()
+
+# Get Home HTML API
 @router.get("/")
 async def get_html_route():
-    return await get_html()
+    return await get_home_html()
 
 # Token Generation API
 @router.post("/token")
@@ -22,8 +27,8 @@ async def refresh_token_route(request: Request):
     return None
 
 # Chat API
-@router.websocket("/chat")
-async def chat_route(websocket:WebSocket, token: str = Depends(get_token)):
+@router.websocket("/ws")
+async def chat_route(websocket:WebSocket):
     return await websocket_endpoint(websocket)
 
 # Get Current Logged In User API
