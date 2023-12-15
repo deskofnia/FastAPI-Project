@@ -1,10 +1,11 @@
 from datetime import datetime
 from database import Base
-from sqlalchemy import TIMESTAMP, Column, String, Boolean, Integer
+from sqlalchemy import TIMESTAMP, Column, ForeignKey, String, Boolean, Integer
 
 class Note(Base):
     __tablename__ = "notes"
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"))
     title = Column(String, nullable=False)
     content = Column(String, nullable=False)
     category = Column(String, nullable=True)

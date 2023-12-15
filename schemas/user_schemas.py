@@ -14,6 +14,7 @@ phone_regex = r"^\+1\d{10}$"
 
 class TokenData(BaseModel):
     email: str | None = None
+    user_id: int | None = None
 
 
 class LoginSchema(BaseModel):

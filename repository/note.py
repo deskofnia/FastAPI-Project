@@ -1,23 +1,30 @@
 from models.note import Note
+from models.user import User
 from schemas.note_schemas import CreateAndUpdateNoteSchema
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
+from schemas.user_schemas import TokenData
+
 
 def get_notes(db: Session, limit, page, search, user_info):
-    # print("****", user_info)
     skip = (page - 1) * limit
     notes = db.query(Note).filter(
-        Note.title.contains(search)).order_by(Note.updatedAt).limit(limit).offset(skip).all()
+        Note.title.contains(search)).filter(Note.user_id==user_info["user_id"]).order_by(Note.updatedAt).limit(limit).offset(skip).all()
     
     return { "success": False, "message": "notes_fetched_successfully", "data": notes }
 
-def create_note(payload: CreateAndUpdateNoteSchema, db: Session):
-    new_note = Note(**payload.dict())
+def create_note(payload: CreateAndUpdateNoteSchema, db: Session, user_info: TokenData):
+    new_note = Note(
+        title=payload.title,
+        content=payload.content,
+        category=payload.category,
+        user_id=user_info["user_id"]
+    )
     db.add(new_note)
     db.commit()
     db.refresh(new_note)
-    return { "success": True, "data": new_note, "message": "notes_created_successfully" }
+    return { "success": True, "data": "new_note", "message": "notes_created_successfully" }
 
 def update_note(noteId: str, payload: CreateAndUpdateNoteSchema, db: Session):
     note_query = db.query(Note).filter(Note.id == noteId)

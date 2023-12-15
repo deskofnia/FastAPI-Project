@@ -30,8 +30,6 @@ def signup(request: UserSchema, db: Session):
             email=request.email,
             is_admin=request.is_admin,
             password=password_hash,
-            verification_otp=otp,
-            # first_login=True,
         )
 
         # send_verify_otp_email(request.email, otp, "signup")

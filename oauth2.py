@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi import Depends, HTTPException, status, WebSocket, status, Query
 from jose import JWTError, jwt
@@ -9,7 +10,7 @@ security = HTTPBearer()
 
 async def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),  
-):
+):  
     try:
         token = credentials.credentials
         payload = jwt.decode(
@@ -17,7 +18,12 @@ async def get_current_user(
         )
         user_id = payload.get("id")
         email = payload.get("email")
-        # print(">>>>user", user_id, ">>>>email", email, ">>>token", token)
+        print(">>>>user", payload["id"], ">>>>email", email, ">>>token" )
+
+        # if datetime.fromtimestamp( payload.get("exp")) > datetime.now():
+        #     raise HTTPException(
+        #         status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired"
+        #     )
         if not user_id or not email:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
