@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db
 
-router = APIRouter(tags=["Notes"], prefix="/notes")
+router = APIRouter(tags=["NOTE"], prefix="/notes")
 
 # Get All Notes API
 @router.get("/", response_model=ResponseModal)

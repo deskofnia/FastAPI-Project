@@ -18,7 +18,7 @@ async def get_current_user(
         )
         user_id = payload.get("id")
         email = payload.get("email")
-        print(">>>>user", payload["id"], ">>>>email", email, ">>>token" )
+        # print(">>>>user", payload["id"], ">>>>email", email, ">>>token" )
 
         # if datetime.fromtimestamp( payload.get("exp")) > datetime.now():
         #     raise HTTPException(
